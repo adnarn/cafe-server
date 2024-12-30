@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'https://your-frontend-domain.vercel.app', // Replace with your frontend domain
+  origin: 'https://ashafa-record-saver123.netlify.app', // Replace with your frontend domain
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
