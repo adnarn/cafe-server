@@ -8,6 +8,7 @@ const createAdminAccount = require('./scripts/admin');
 const ItemModel = require('./models/ItemModel');
 const SelectedItemModel = require('./models/selectableItemModel');
 const TaskModel = require('./models/toDoModel');
+const folderRoute = require('./routes/selctabelItems');
 
 
 const app = express();
@@ -16,10 +17,7 @@ const PORT = process.env.PORT || 4000;
 // Middleware
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({
-  origin: 'https://ashafa-record-saver123.netlify.app', // Replace with your frontend domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
+app.use(cors());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -32,18 +30,50 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes
 app.use('/user', signupRoute);
 app.use('/auth', loginRoute);
+app.use('/api', folderRoute);
 
 app.get('/', (req, res) => {
-  ItemModel.find({})
+  ItemModel.find({}).sort({ date: -1 })
     .then(items => res.json(items))
     .catch(err => res.status(500).json({ error: err.message }));
 });
 
-app.post('/addItem', (req, res) => {
-  ItemModel.create(req.body)
-    .then(item => res.json(item))
-    .catch(err => res.status(500).json({ error: err.message }));
+// app.post('/addItem', (req, res) => {
+//   ItemModel.create(req.body)
+//     .then(item => res.json(item))
+//     .catch(err => res.status(500).json({ error: err.message }));
+// });
+// app.post('/addItem', async (req, res) => {
+//   try {
+//     const newItem = await ItemModel.create(req.body); // Create new item
+//     res.status(201).json({ _id: newItem._id }); // Return the new item's ID
+//   } catch (error) {
+//     res.status(500).json({ error: 'Failed to create item' });
+//   }
+// });
+
+app.post('/addItem', async (req, res) => {
+  const { items, customer, comment } = req.body;
+
+  if (!items || !customer) {
+    return res.status(400).json({ error: 'Items and customer name are required' });
+  }
+
+  try {
+    const newOrder = new ItemModel({
+      items,
+      customer,
+      comment,
+    });
+    const savedOrder = await newOrder.save();
+    res.status(201).json({ message: 'Order saved successfully', _id: savedOrder._id });
+  } catch (error) {
+    console.error('Error saving order:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
+
+
 
 app.delete('/deleteItem/:id', (req, res) => {
   const id = req.params.id;
