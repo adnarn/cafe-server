@@ -7,3 +7,34 @@ const selectableItemSchema = new mongoose.Schema({
 
 const SelectableItem = mongoose.model('SelectableItem', selectableItemSchema);
 module.exports = SelectableItem;
+
+
+// const mongoose = require('mongoose');
+
+// const selectableItemSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     required: true,
+//   },
+//   items: [
+//     {
+//       type: String,
+//       ref: 'Item', // Reference to the Item model
+//     },
+//     {
+//       type: Number,
+//       ref: 'price', // Reference to the Item model
+//     },
+//   ],
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+//   updatedAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+// });
+
+// const SelectableItem = mongoose.model('SelectableItem', selectableItemSchema);
+// module.exports = SelectableItem;
