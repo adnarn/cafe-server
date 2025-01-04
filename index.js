@@ -4,7 +4,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const signupRoute = require('./routes/signup');
 const loginRoute = require('./routes/login');
-const createAdminAccount = require('./scripts/admin');
+const {createAdminAccount,createUserAccount} = require('./scripts/admin');
+// const createUserAccount = require('./scripts/admin');
 const ItemModel = require('./models/ItemModel');
 const SelectedItemModel = require('./models/selectableItemModel');
 const TaskModel = require('./models/toDoModel');
@@ -199,6 +200,7 @@ TaskModel.create(req.body)
 app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
   createAdminAccount();
+  createUserAccount();
 });
 
 // Export app for Vercel
