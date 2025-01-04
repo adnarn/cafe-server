@@ -9,7 +9,11 @@ async function createAdminAccount() {
             const newAdmin = new User({
                 email: 'admin@test.com',
                 name: 'Admin',
+<<<<<<< HEAD
                 password: await argon2.hash('admin2345'),
+=======
+                password: await argon2.hash('admin'),
+>>>>>>> d18dd9c9bf5b7f2112d3a3360de6da9a0a0ee237
                 role: 'admin'
             });
 
@@ -22,6 +26,7 @@ async function createAdminAccount() {
         console.error("Error creating admin account:", error.message);
     }
 }
+<<<<<<< HEAD
 async function createUserAccount() {
     try {
         const existingUser = await User.findOne({ email: 'user@test.com' });
@@ -64,3 +69,7 @@ module.exports ={
     createUserAccount,
     generateCustomRefId
 }
+=======
+
+module.exports = createAdminAccount;
+>>>>>>> d18dd9c9bf5b7f2112d3a3360de6da9a0a0ee237
