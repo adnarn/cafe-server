@@ -9,6 +9,6 @@ expenseRouter.get("/get-expense", getExpense);
 expenseRouter.post("/add-expense", addExpense);
 
 // Route to delete an expense by ID
-expenseRouter.delete("delete-expense/:id", deleteExpense);
+expenseRouter.delete("/delete-expense/:id", deleteExpense);
 
 module.exports = expenseRouter;
