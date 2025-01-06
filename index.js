@@ -10,6 +10,7 @@ const ItemModel = require('./models/ItemModel');
 const SelectedItemModel = require('./models/selectableItemModel');
 const TaskModel = require('./models/toDoModel');
 const folderRoute = require('./routes/selctabelItems');
+const expenseRouter = require('./routes/expense');
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/user', signupRoute);
 app.use('/auth', loginRoute);
 app.use('/api', folderRoute);
 app.use('/api', userRoutes);
+app.use('/api', expenseRouter);
 
 app.get('/', (req, res) => {
   ItemModel.find({}).sort({ date: -1 })
@@ -56,7 +58,7 @@ app.get('/', (req, res) => {
 
 app.post('/addItem', async (req, res) => {
   const { items, customer, comment, payment, discount } = req.body;
-  const referenceId = generateCustomRefId();
+  const referenceId = await generateCustomRefId();
 
 
   if (!items || !customer) {
@@ -74,6 +76,7 @@ app.post('/addItem', async (req, res) => {
     });
     const savedOrder = await newOrder.save();
     res.status(201).json({ message: 'Order saved successfully', _id: savedOrder._id });
+  console.log('Generated Reference ID:', referenceId);
   } catch (error) {
     console.error('Error saving order:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -1,5 +1,7 @@
 const User = require('../models/user');
+const Counter = require('../models/counter');
 const argon2 = require("argon2");
+
 
 async function createAdminAccount() {
     try {
@@ -45,19 +47,32 @@ async function createUserAccount() {
 }
 
 
-let orderIndex = 1;  // Start with 001, you can reset this as needed
+// let orderIndex = 1;  // Start with 001, you can reset this as needed
 
-const generateCustomRefId = () => {
-  const paddedIndex = String(orderIndex).padStart(5, '0'); // Ensure index is 3 digits
+// const generateCustomRefId = () => {
+//   const paddedIndex = String(orderIndex).padStart(5, '0'); // Ensure index is 3 digits
 
-  // Create the reference ID
-  const referenceId = `${paddedIndex}`;
+//   // Create the reference ID
+//   const referenceId = `${paddedIndex}`;
 
-  // Increment the index for the next order (you can reset periodically)
-  orderIndex += 1;
+//   // Increment the index for the next order (you can reset periodically)
+//   orderIndex += 1;
 
-  return referenceId;
-};
+//   return referenceId;
+// };
+
+// Generate Reference ID
+const generateCustomRefId = async () => {
+    const counter = await Counter.findByIdAndUpdate(
+      { _id: 'orderIndex' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true } // Create if it doesn't exist
+    );
+  
+    const paddedIndex = String(counter.seq).padStart(5, '0'); // Ensure index is 5 digits
+    return `${paddedIndex}`;
+  };
+
 
 module.exports ={ 
     createAdminAccount,
