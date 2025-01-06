@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 // });
 
 app.post('/addItem', async (req, res) => {
-  const { items, customer, comment, payment } = req.body;
+  const { items, customer, comment, payment, discount } = req.body;
   const referenceId = generateCustomRefId();
 
 
@@ -68,6 +68,7 @@ app.post('/addItem', async (req, res) => {
       items,
       customer,
       payment,
+      discount,
       comment,
       referenceId
     });
@@ -105,12 +106,30 @@ app.put('/updateItem/:id', (req, res) => {
     .catch(err => res.status(500).json({ error: err.message }));
 });
 
-app.get('/search', (req, res) => {
+app.get('/search', async (req, res) => {
   const query = req.query.q;
-  ItemModel.find({ name: { $regex: query, $options: 'i' } })
-    .then(items => res.json(items))
-    .catch(err => res.status(500).json({ error: err.message }));
+
+  if (!query) {
+    return res.json([]);  
+  }
+
+  try {
+    const items = await ItemModel.find({
+      $or: [
+        { referenceId: { $regex: query, $options: "i" } },
+        { "items.name": { $regex: query, $options: "i" } },
+        { customer: { $regex: query, $options: "i" } },
+        { comment: { $regex: query, $options: "i" } },
+        // { date: { $regex: query, $options: "i" } },
+      ],
+    });
+    res.json(items);
+  } catch (err) {
+    console.error("Error during search:", err);
+    res.status(500).json({ error: err.message });
+  }
 });
+
 
 
 //selectable items

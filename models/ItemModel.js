@@ -6,6 +6,7 @@ const ItemSchema = new Schema({
   customer: String,
   comment: String,
   payment: String,
+  discount: Number,
   referenceId: { type: String, required: true },
   items: [
     {
