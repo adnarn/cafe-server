@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
 // });
 
 app.post('/addItem', async (req, res) => {
-  const { items, customer, comment } = req.body;
+  const { items, customer, comment, payment } = req.body;
   const referenceId = generateCustomRefId();
 
 
@@ -67,6 +67,7 @@ app.post('/addItem', async (req, res) => {
     const newOrder = new ItemModel({
       items,
       customer,
+      payment,
       comment,
       referenceId
     });

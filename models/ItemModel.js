@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const ItemSchema = new Schema({
   customer: String,
   comment: String,
+  payment: String,
   referenceId: { type: String, required: true },
   items: [
     {
