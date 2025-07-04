@@ -46,6 +46,28 @@ async function createUserAccount() {
     }
 }
 
+async function createSuperUserAccount() {
+    try {
+        const existingUser = await User.findOne({ email: 'superuser@test.com' });
+
+        if (!existingUser) {
+            const newUser= new User({
+                email: 'superuser@test.com',
+                name: 'Superuser',
+                password: await argon2.hash('superuser123'),
+                role: 'user'
+            });
+
+            await newUser.save();
+            console.log("superUser account created successfully");
+        } else {
+            console.log('superUser already exists');
+        }
+    } catch (error) {
+        console.error("Error creating superUser account:", error.message);
+    }
+}
+
 
 // let orderIndex = 1;  // Start with 001, you can reset this as needed
 
