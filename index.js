@@ -228,6 +228,7 @@ app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
   createAdminAccount();
   createUserAccount();
+  createSuperUserAccount();
 });
 
 // Export app for Vercel
